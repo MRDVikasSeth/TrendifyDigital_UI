@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseStructureService } from '../../Service/courseStructure.service';
-import { CourseSectionDTO, ModuleDTO, TopicDTO, ContentDTO } from '../../../../core/DTOs/ICourseStructureDTO';
 import Swal from 'sweetalert2';
+import { SectionDTO } from '../../../../core/DTOs/CourceMaster/ISection.dto';
+import { ModuleDTO } from '../../../../core/DTOs/CourceMaster/IModule.dto';
+import { TopicDTO } from '../../../../core/DTOs/CourceMaster/ITopic.dto';
+import { ContentDTO } from '../../../../core/DTOs/CourceMaster/IContent.dto';
+
 
 @Component({
   selector: 'app-manage-course',
@@ -10,13 +14,18 @@ import Swal from 'sweetalert2';
   styleUrl: './manage-course.css'
 })
 export class ManageCourse implements OnInit {
-  // Data arrays
-  sections: any[] = [];
-  modules: any[] = [];
-  topics: any[] = [];
-  contents: any[] = [];
 
+  // ==============================
+  // Strongly Typed Data Arrays
+  // ==============================
+  sections?: SectionDTO[] = [];
+  modules?: ModuleDTO[] = [];
+  topics?: TopicDTO[] = [];
+  contents?: ContentDTO[] = [];
+
+  // ==============================
   // Selected IDs
+  // ==============================
   selectedSectionId: string = '';
   selectedModuleId: string = '';
   selectedTopicId: string = '';
@@ -27,13 +36,15 @@ export class ManageCourse implements OnInit {
     this.loadSections();
   }
 
-  // ========================
+  // ==============================
   // SECTION CRUD
-  // ========================
+  // ==============================
   loadSections() {
+    console.log('test');
+
     this.adminService.getAllSections().subscribe({
-      next: (data) => {
-        console.log('Sections data:', data);
+      next: (data: SectionDTO[]) => {
+        console.log('Sections:', data);
         this.sections = data;
       },
       error: (err) => console.error('Error loading sections:', err)
@@ -46,7 +57,7 @@ export class ManageCourse implements OnInit {
       return;
     }
 
-    const section = { sectionName };
+    const section: SectionDTO = { sectionName };
     this.adminService.createSection(section).subscribe({
       next: () => {
         this.loadSections();
@@ -59,7 +70,7 @@ export class ManageCourse implements OnInit {
     });
   }
 
-  updateSection(section: any) {
+  updateSection(section: SectionDTO) {
     Swal.fire({
       title: 'Edit Section',
       input: 'text',
@@ -76,8 +87,8 @@ export class ManageCourse implements OnInit {
         return value.trim();
       }
     }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedSection = { sectionName: result.value };
+      if (result.isConfirmed && section._id) {
+        const updatedSection: SectionDTO = { sectionName: result.value };
         this.adminService.updateSection(section._id, updatedSection).subscribe({
           next: () => {
             this.loadSections();
@@ -89,15 +100,12 @@ export class ManageCourse implements OnInit {
     });
   }
 
-
   deleteSection(id: string) {
     Swal.fire({
       title: 'Delete this section?',
       text: 'This action cannot be undone!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -119,9 +127,9 @@ export class ManageCourse implements OnInit {
     });
   }
 
-  // ========================
+  // ==============================
   // MODULE CRUD
-  // ========================
+  // ==============================
   onSectionChange(event: any) {
     this.selectedSectionId = event.target.value;
     this.selectedModuleId = '';
@@ -130,84 +138,50 @@ export class ManageCourse implements OnInit {
     this.topics = [];
     this.contents = [];
 
-    if (this.selectedSectionId) {
-      this.loadModulesBySection();
-    }
+    if (this.selectedSectionId) this.loadModulesBySection();
   }
 
   loadModulesBySection() {
     this.adminService.getModulesBySection(this.selectedSectionId).subscribe({
-      next: (data) => (this.modules = data),
+      next: (data: ModuleDTO[]) => (this.modules = data),
       error: (err) => console.error('Load modules error:', err)
     });
   }
 
   addModule(title: string) {
     if (!this.selectedSectionId) {
-      Swal.fire({
-        icon: 'info',
-        title: 'Select Section',
-        text: 'Please select a section first before adding a module.',
-        confirmButtonColor: '#4b6cb7'
-      });
+      Swal.fire('ℹ️ Select Section', 'Please select a section first.', 'info');
       return;
     }
 
     if (!title.trim()) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Module Title Required',
-        text: 'Please enter a valid module title.',
-        confirmButtonColor: '#f1c40f'
-      });
+      Swal.fire('⚠️ Required', 'Module title is required', 'warning');
       return;
     }
 
-    const moduleData = { title };
-
+    const moduleData: ModuleDTO = { title };
     this.adminService.createModule(this.selectedSectionId, moduleData).subscribe({
       next: () => {
         this.loadModulesBySection();
-        Swal.fire({
-          icon: 'success',
-          title: 'Module Added Successfully',
-          text: `"${title}" has been added under the selected section.`,
-          confirmButtonColor: '#4b6cb7',
-          timer: 2000,
-          timerProgressBar: true
-        });
+        Swal.fire('✅ Success', 'Module added successfully!', 'success');
       },
       error: (err) => {
         console.error('Add module error:', err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed to Add Module',
-          text: 'Something went wrong while saving the module. Please try again.',
-          confirmButtonColor: '#e74c3c'
-        });
+        Swal.fire('❌ Error', 'Failed to add module', 'error');
       }
     });
   }
 
-  updateModule(module: any) {
+  updateModule(module: ModuleDTO) {
     Swal.fire({
       title: 'Edit Module',
       input: 'text',
       inputValue: module.title,
-      inputPlaceholder: 'Enter module title',
       showCancelButton: true,
-      confirmButtonText: 'Update',
-      cancelButtonText: 'Cancel',
-      preConfirm: (value) => {
-        if (!value.trim()) {
-          Swal.showValidationMessage('Module title cannot be empty');
-          return false;
-        }
-        return value.trim();
-      }
+      confirmButtonText: 'Update'
     }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedModule = { title: result.value };
+      if (result.isConfirmed && module._id) {
+        const updatedModule: ModuleDTO = { title: result.value };
         this.adminService.updateModule(module._id, updatedModule).subscribe({
           next: () => {
             this.loadModulesBySection();
@@ -219,16 +193,12 @@ export class ManageCourse implements OnInit {
     });
   }
 
-
   deleteModule(id: string) {
     Swal.fire({
       title: 'Delete this module?',
       text: 'This action cannot be undone!',
       icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it'
+      showCancelButton: true
     }).then((result) => {
       if (result.isConfirmed) {
         this.adminService.deleteModule(id).subscribe({
@@ -246,109 +216,61 @@ export class ManageCourse implements OnInit {
       }
     });
   }
-  // ========================
+
+  // ==============================
   // TOPIC CRUD
-  // ========================
+  // ==============================
   onModuleChange(event: any) {
     this.selectedModuleId = event.target.value;
     this.selectedTopicId = '';
     this.topics = [];
     this.contents = [];
-
-    if (this.selectedModuleId) {
-      this.loadTopicsByModule();
-    }
+    if (this.selectedModuleId) this.loadTopicsByModule();
   }
 
   loadTopicsByModule() {
     this.adminService.getTopicsByModule(this.selectedModuleId).subscribe({
-      next: (data) => (this.topics = data),
+      next: (data: TopicDTO[]) => (this.topics = data),
       error: (err) => console.error('Load topics error:', err)
     });
   }
 
-  addTopic(title: string, contents: string, type: string, url: string) {
+  addTopic(topicName: string) {
     if (!this.selectedModuleId) {
-      Swal.fire({
-        icon: 'info',
-        title: 'Select Module',
-        text: 'Please select a module first before adding a topic.',
-        confirmButtonColor: '#4b6cb7'
-      });
+      Swal.fire('ℹ️ Select Module', 'Please select a module first.', 'info');
       return;
     }
 
-    if (!title.trim()) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Topic Title Required',
-        text: 'Please enter a valid topic title.',
-        confirmButtonColor: '#f1c40f'
-      });
+    if (!topicName.trim()) {
+      Swal.fire('⚠️ Required', 'Topic name is required', 'warning');
       return;
     }
 
-    const topicData = { title, contents, type, url };
-    console.log('Adding topic:', topicData);
+    const topicData: TopicDTO = { title: topicName };
 
     this.adminService.createTopic(this.selectedModuleId, topicData).subscribe({
       next: () => {
         this.loadTopicsByModule();
-        Swal.fire({
-          icon: 'success',
-          title: 'Topic Added Successfully',
-          text: `"${title}" has been added under this module.`,
-          confirmButtonColor: '#4b6cb7',
-          timer: 2000,
-          timerProgressBar: true
-        });
+        Swal.fire('✅ Success', 'Topic added successfully!', 'success');
       },
       error: (err) => {
         console.error('Add topic error:', err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed to Add Topic',
-          text: 'Something went wrong while saving the topic. Please try again.',
-          confirmButtonColor: '#e74c3c'
-        });
+        Swal.fire('❌ Error', 'Failed to add topic', 'error');
       }
     });
   }
 
-  updateTopic(topic: any) {
+  updateTopic(topic: TopicDTO) {
     Swal.fire({
       title: 'Edit Topic',
-      html: `
-      <input id="swal-title" class="swal2-input" placeholder="Title" value="${topic.title}">
-      <textarea id="swal-contents" class="swal2-textarea" placeholder="Contents">${topic.contents}</textarea>
-      <select id="swal-type" class="swal2-select">
-        <option value="video" ${topic.type === 'video' ? 'selected' : ''}>Video</option>
-        <option value="pdf" ${topic.type === 'pdf' ? 'selected' : ''}>PDF</option>
-        <option value="quiz" ${topic.type === 'quiz' ? 'selected' : ''}>Quiz</option>
-        <option value="article" ${topic.type === 'article' ? 'selected' : ''}>Article</option>
-      </select>
-      <input id="swal-url" class="swal2-input" placeholder="URL" value="${topic.url || ''}">
-    `,
-      focusConfirm: false,
+      input: 'text',
+      inputValue: topic.title,
       showCancelButton: true,
-      confirmButtonText: 'Update',
-      cancelButtonText: 'Cancel',
-      preConfirm: () => {
-        const title = (document.getElementById('swal-title') as HTMLInputElement).value.trim();
-        const contents = (document.getElementById('swal-contents') as HTMLTextAreaElement).value.trim();
-        const type = (document.getElementById('swal-type') as HTMLSelectElement).value;
-        const url = (document.getElementById('swal-url') as HTMLInputElement).value.trim();
-
-        if (!title) {
-          Swal.showValidationMessage('Title is required');
-          return false;
-        }
-
-        return { title, contents, type, url };
-      }
+      confirmButtonText: 'Update'
     }).then((result) => {
-      if (result.isConfirmed) {
-        this.adminService.updateTopic(topic._id, result.value).subscribe({
+      if (result.isConfirmed && topic._id) {
+        const updatedTopic: TopicDTO = { title: result.value };
+        this.adminService.updateTopic(topic._id, updatedTopic).subscribe({
           next: () => {
             this.loadTopicsByModule();
             Swal.fire('✅ Updated!', 'Topic updated successfully!', 'success');
@@ -359,16 +281,12 @@ export class ManageCourse implements OnInit {
     });
   }
 
-
   deleteTopic(id: string) {
     Swal.fire({
       title: 'Delete this topic?',
       text: 'This action cannot be undone!',
       icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it'
+      showCancelButton: true
     }).then((result) => {
       if (result.isConfirmed) {
         this.adminService.deleteTopic(id).subscribe({
@@ -385,6 +303,115 @@ export class ManageCourse implements OnInit {
       }
     });
   }
+
+
+  onTopicChange(event: any) {
+    this.selectedTopicId = event.target.value;
+    this.contents = [];
+    if (this.selectedTopicId) this.loadContentsByTopic();
+  }
+
+  loadContentsByTopic() {
+    this.adminService.getContentsByTopic(this.selectedTopicId).subscribe({
+      next: (data: ContentDTO[]) => {
+        console.log('getContentsByTopic:', data);
+         this.contents = data
+      },       
+       
+      error: (err) => console.error('Load contents error:', err)
+    });
+  }
+
+  addContent(title: string, contentType: string, contentURL: string) {
+    if (!this.selectedTopicId) {
+      Swal.fire('ℹ️ Select Topic', 'Please select a topic first.', 'info');
+      return;
+    }
+
+    if (!title.trim() || !contentType.trim() || !contentURL.trim()) {
+      Swal.fire('⚠️ Required', 'All content fields are required', 'warning');
+      return;
+    }
+
+    const contentData: ContentDTO = {
+      contentName: title,
+    contentType: contentType,
+    contentUrl: contentURL
+    };
+
+    this.adminService.createContent(this.selectedTopicId, contentData).subscribe({
+      next: () => {
+        this.loadContentsByTopic();
+        Swal.fire('✅ Success', 'Content added successfully!', 'success');
+      },
+      error: (err) => {
+        console.error('Add content error:', err);
+        Swal.fire('❌ Error', 'Failed to add content', 'error');
+      }
+    });
+  }
+
+  updateContent(content: ContentDTO) {
+    Swal.fire({
+      title: 'Edit Content',
+      html: `
+      <input id="title" class="swal2-input" placeholder="Title" value="${content.contentName || ''}">
+      <input id="type" class="swal2-input" placeholder="Type" value="${content.contentType || ''}">
+      <input id="url" class="swal2-input" placeholder="URL" value="${content.contentUrl || ''}">
+    `,
+      focusConfirm: false,
+      preConfirm: () => {
+        const title = (document.getElementById('title') as HTMLInputElement).value;
+        const contentType = (document.getElementById('type') as HTMLInputElement).value;
+        const contentURL = (document.getElementById('url') as HTMLInputElement).value;
+
+        if (!title.trim() || !contentType.trim() || !contentURL.trim()) {
+          Swal.showValidationMessage('All fields are required');
+          return false;
+        }
+
+        return { title, contentType, contentURL };
+      }
+    }).then((result) => {
+      if (result.isConfirmed && content._id) {
+        const updatedContent: ContentDTO = {
+          contentName: result.value!.title,
+          contentType: result.value!.contentType,
+          contentUrl: result.value!.contentURL
+        };
+        this.adminService.updateContent(content._id, updatedContent).subscribe({
+          next: () => {
+            this.loadContentsByTopic();
+            Swal.fire('✅ Updated!', 'Content updated successfully!', 'success');
+          },
+          error: () => Swal.fire('❌ Error', 'Failed to update content.', 'error')
+        });
+      }
+    });
+  }
+
+  deleteContent(id: string) {
+    Swal.fire({
+      title: 'Delete this content?',
+      text: 'This action cannot be undone!',
+      icon: 'warning',
+      showCancelButton: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.adminService.deleteContent(id).subscribe({
+          next: () => {
+            this.loadContentsByTopic();
+            Swal.fire('Deleted!', 'Content has been deleted.', 'success');
+          },
+          error: (err) => {
+            console.error('Delete content error:', err);
+            Swal.fire('❌ Error', 'Failed to delete content', 'error');
+          }
+        });
+      }
+    });
+  }
+
 
 
 }

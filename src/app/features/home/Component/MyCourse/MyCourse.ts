@@ -6,6 +6,7 @@ import { CourseSectionService } from '../../Service/courseSection.service';
 import { StudentAccessService } from '../../Service/studentAccess.service';
 import { StudentAccessDTO } from '../../../../core/DTOs/studentAccess.dto';
 import { IStudentProfileDTO } from '../../../../core/DTOs/IStudentProfileDTO';
+import { MyCourseService } from '../../Service/myCourse.service';
 
 
 function mapRawToStudentDTO(rawData: any): IStudentProfileDTO {
@@ -81,14 +82,13 @@ export class MyCourse implements OnInit {
     companyName: '',
     designation: ''
   };
-  // userAccessibleSections: number[] = [5, 2, 3, 7];
 
-  studentId = '68edfc4dc420583a7b46d67b';
   isLoading = true;
   userAccessibleSections: number[] = [];
   sectionsData: CourseSectionDTO[] = [];
   constructor(private router: Router,
     private courseService: CourseSectionService,
+      private myCourseSer: MyCourseService,
     private studentAccessService: StudentAccessService
   ) { }
 
@@ -101,7 +101,8 @@ export class MyCourse implements OnInit {
 
 
       this.loadProfileData();
-      this.loadSections();
+      // this.loadSections();
+      this.loadSection();
       this.loadUserAccess(this.studentProfile.studentId);
 
     } else {
@@ -111,15 +112,36 @@ export class MyCourse implements OnInit {
 
   }
 
-  loadSections(): void {
-    this.courseService.getAllSections().subscribe({
+  // loadSections(): void {
+  //   this.courseService.getAllSections().subscribe({
+  //     next: (data) => {
+  //       this.sectionsData = data;
+
+  //       this.isLoading = false;
+
+  //       console.log(this.sectionsData, 'test mu cource');
+
+  //     },
+  //     error: (err) => {
+  //       this.isLoading = false;
+  //       console.error('Error loading course sections:', err);
+  //       Swal.fire({
+  //         icon: 'error',
+  //         title: 'Error loading course data',
+  //         text: 'Please try again later.',
+  //       });
+  //     },
+  //   });
+  // }
+
+   loadSection(): void {
+    this.myCourseSer.getAllSections().subscribe({
       next: (data) => {
         this.sectionsData = data;
-
         this.isLoading = false;
 
-        console.log(this.sectionsData, 'test mu cource');
-
+          console.log(data, 'sections Data');
+          
       },
       error: (err) => {
         this.isLoading = false;
@@ -133,25 +155,29 @@ export class MyCourse implements OnInit {
     });
   }
 
-  loadUserAccess(studentId: string): void {
-    this.studentAccessService.getAccessByStudent(studentId).subscribe({
-      next: (accessList: StudentAccessDTO[]) => {
-        // Filter only granted sections
-        this.userAccessibleSections = accessList
-          .filter(a => a.accessGranted)
-          .map(a => a.sectionId);
+ loadUserAccess(studentId: string): void {
+  this.studentAccessService.getAccessByStudent(studentId).subscribe({
+    next: (accessList: StudentAccessDTO[]) => {
+      console.log(accessList, 'access list new');
 
-        console.log('Accessible Sections:', this.userAccessibleSections);
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.isLoading = false;
-        console.error('Error fetching access info:', err);
-      }
-    });
-  }
+      // ✅ Use sectionId (which now stores _id)
+      this.userAccessibleSections = accessList
+        .filter(a => a.accessGranted)
+        .map(a => a.sectionId);
+
+      console.log('Accessible Sections:', this.userAccessibleSections);
+      this.isLoading = false;
+    },
+    error: (err) => {
+      this.isLoading = false;
+      console.error('Error fetching access info:', err);
+    }
+  });
+}
+
 
   handleSectionClick(sectionId: number) {
+     console.log(sectionId,'payload id ');
     if (!this.userAccessibleSections.includes(sectionId)) {
       Swal.fire({
         toast: true,

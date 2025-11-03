@@ -289,3 +289,34 @@ select.form-select:focus {
   }
 }
 
+
+/* Custom tab styling */
+.custom-tabs .nav-link {
+  background-color: var(--input-group-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--primary-color);
+  border-radius: 0;
+  margin-right: 5px;
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* Active tab */
+.custom-tabs .nav-link.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+   border-radius: 0;
+}
+
+/* Hover effect */
+.custom-tabs .nav-link:hover {
+  background-color: var(--primary-color);
+  color: white;
+   border-radius: 0;
+}
+
+.custom-tabs{
+  padding-bottom: 15px;
+}

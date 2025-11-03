@@ -17,17 +17,17 @@
         <table class="student-table">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Section ID</th>
                     <th>Section Title</th>
-                    <th>Total Modules</th>
                     <th>Access Status</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let section of courseSections">
+                <tr *ngFor="let section of courseSections">                     
                     <td>{{ section.sectionId }}</td>
-                    <td>{{ section.title }}</td>
-                    <td>{{ section.modulesCount }}</td>
+                    <td>{{ section._id }}</td>
+                    <td>{{ section.sectionName }}</td>
                     <td>
                         <button class="action-btn update-btn" [ngClass]="section.accessGranted ? 'active' : 'inactive'"
                             (click)="toggleAccess(section)">

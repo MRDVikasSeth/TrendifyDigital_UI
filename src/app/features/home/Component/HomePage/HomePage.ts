@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IStudentProfileDTO } from '../../../../core/DTOs/IStudentProfileDTO';
 import { Router } from '@angular/router';
 import { StudentService } from '../../Service/student.service';
+import { ThemeService } from '../../../../core/Service/theme.service';
 
 
 function mapRawToStudentDTO(rawData: any): IStudentProfileDTO {
@@ -52,7 +53,10 @@ export class HomePage implements OnInit {
   isAdminFlag: boolean = false;
   isStudentFlag: boolean = false;
 
-  constructor(private studentService: StudentService, private router: Router) { }
+  constructor(private studentService: StudentService,
+    private router: Router,
+    private themeService: ThemeService
+  ) { }
 
   ngOnInit(): void {
     const profileStr = sessionStorage.getItem('studentProfile');
@@ -72,6 +76,10 @@ export class HomePage implements OnInit {
     }
 
     this.loadProfile();
+  }
+
+  switchTheme(theme: string) {
+    this.themeService.setTheme(theme);
   }
 
   loadProfile() {

@@ -1,17 +1,24 @@
 <div class="manage-course-container">
 
   <!-- NAV TABS -->
-  <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link active" data-bs-toggle="tab" href="#tabSection">Sections</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-bs-toggle="tab" href="#tabModule">Modules</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-bs-toggle="tab" href="#tabTopic">Topics</a>
-    </li>
-  </ul>
+  <div class="">
+    <ul class="nav nav-tabs flex-wrap custom-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#tabSection">Sections</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#tabModule">Modules</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#tabTopic">Topics</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#tabContent">Content</a>
+      </li>
+    </ul>
+  </div>
+
+
 
   <div class="tab-content mt-3">
 
@@ -24,17 +31,38 @@
         <button class="btn btn-primary" (click)="addSection(sectionName.value)">Add Section</button>
       </div>
 
-      <ul class="list-group mt-3">
-        <li *ngFor="let s of sections" class="list-group-item">
-          <span>{{ s.sectionName }}</span>
-          <div>
-            <button class="btn btn-sm btn-primary me-2" (click)="updateSection(s)">Edit</button>
-            <button class="btn btn-sm btn-danger" (click)="deleteSection(s._id)">Delete</button>
-          </div>
-        </li>
-      </ul>
+      <div class="table-responsive mt-3">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col" class="text-center">#</th>
+              <th scope="col">Section Name</th>
+              <th scope="col" class="text-center">Edit</th>
+              <th scope="col" class="text-center">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of sections; let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>{{ s.sectionName }}</td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-primary me-2" (click)="updateSection(s)">
+                  <i class="bi bi-pencil"></i> Edit
+                </button>
 
-      <p *ngIf="sections.length === 0" class="text-muted mt-2">No sections available.</p>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-danger" (click)="deleteSection(s._id!)">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      <p *ngIf="sections?.length === 0" class="text-muted mt-2">No sections available.</p>
     </div>
 
     <!-- =============== MODULE TAB =============== -->
@@ -51,38 +79,38 @@
           <input type="text" #moduleTitle placeholder="Enter module title" class="form-control w-50" />
           <button class="btn btn-primary" (click)="addModule(moduleTitle.value)">Add Module</button>
         </div>
+      </div>
 
-        <div class="table-responsive mt-3">
-          <table class="module-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Docs</th>
-                <th>Videos</th>
-                <th>Edit</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let m of modules; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td>{{ m.title }}</td>
-                <td>{{ m.docsCount || 0 }}</td>
-                <td>{{ m.videosCount || 0 }}</td>
-                <td>
-                  <button class="btn btn-sm btn-primary me-2" (click)="updateModule(m)">Edit</button>
-                </td>
-                 <td>
-                  <button class="btn btn-sm btn-danger" (click)="deleteModule(m._id)">Delete</button>
-                </td>
-              </tr>
-              <tr *ngIf="modules.length === 0">
-                <td colspan="5" class="text-center text-muted">No modules found.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="table-responsive mt-3">
+        <table class="module-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <!-- <th>Docs</th>
+                <th>Videos</th> -->
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let m of modules; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ m.title }}</td>
+              <!-- <td>{{ m.docsCount || 0 }}</td>
+                <td>{{ m.videosCount || 0 }}</td> -->
+              <td>
+                <button class="btn btn-sm btn-primary me-2" (click)="updateModule(m)">Edit</button>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-danger" (click)="deleteModule(m._id!)">Delete</button>
+              </td>
+            </tr>
+            <tr *ngIf="modules?.length === 0">
+              <td colspan="5" class="text-center text-muted">No modules found.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -90,33 +118,30 @@
     <div id="tabTopic" class="tab-pane fade">
       <h5>Select Section & Module</h5>
 
-      <select class="form-select w-50 mb-2" (change)="onSectionChange($event)">
-        <option value="">-- Select Section --</option>
-        <option *ngFor="let s of sections" [value]="s._id">{{ s.sectionName }}</option>
-      </select>
+      <div class="row g-2 align-items-center mb-3">
+        <div class="col-12 col-md-3">
+          <select class="form-select" (change)="onSectionChange($event)">
+            <option value="">-- Select Section --</option>
+            <option *ngFor="let s of sections" [value]="s._id">{{ s.sectionName }}</option>
+          </select>
+        </div>
 
-      <select class="form-select w-50 mb-3" (change)="onModuleChange($event)">
-        <option value="">-- Select Module --</option>
-        <option *ngFor="let m of modules" [value]="m._id">{{ m.title }}</option>
-      </select>
+        <div class="col-12 col-md-3">
+          <select class="form-select" (change)="onModuleChange($event)">
+            <option value="">-- Select Module --</option>
+            <option *ngFor="let m of modules" [value]="m._id">{{ m.title }}</option>
+          </select>
+        </div>
+      </div>
+
 
       <div *ngIf="selectedModuleId">
-        <input type="text" #topicTitle placeholder="Enter topic title" class="form-control w-50 mb-2" />
-        <textarea #topicContents placeholder="Enter topic contents" class="form-control w-50 mb-2" rows="3"></textarea>
-
-        <select class="form-select w-50 mb-2" #topicType>
-          <option value="video">Video</option>
-          <option value="pdf">PDF</option>
-          <option value="quiz">Quiz</option>
-          <option value="article">Article</option>
-        </select>
-
-        <input type="text" #topicUrl placeholder="Enter topic URL" class="form-control w-50 mb-3" />
-
-        <button class="btn btn-primary"
-          (click)="addTopic(topicTitle.value, topicContents.value, topicType.value, topicUrl.value)">
-          Add Topic
-        </button>
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+          <input type="text" #topicTitle placeholder="Enter topic title" class="form-control w-50 mb-2" />
+          <button class="btn btn-primary" (click)="addTopic(topicTitle.value)">
+            Add Topic
+          </button>
+        </div>
       </div>
 
       <div class="table-responsive mt-4">
@@ -125,9 +150,6 @@
             <tr>
               <th>#</th>
               <th>Title</th>
-              <th>Contents</th>
-              <th>Type</th>
-              <th>URL</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
@@ -136,32 +158,120 @@
             <tr *ngFor="let t of topics; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ t.title }}</td>
-              <td>{{ t.contents }}</td>
-              <td>
-                <span class="badge" [ngClass]="{
-                  'badge-video': t.type === 'video',
-                  'badge-doc': t.type === 'pdf' || t.type === 'document',
-                  'badge-quiz': t.type === 'quiz'
-                }">
-                  {{ t.type | titlecase }}
-                </span>
-              </td>
-              <td>
-                <a [href]="t.url" target="_blank" class="topic-link">{{ t.url }}</a>
-              </td>
+
               <td>
                 <button class="btn btn-sm btn-primary me-2" (click)="updateTopic(t)">Edit</button>
               </td>
               <td>
-                <button class="btn btn-sm btn-danger" (click)="deleteTopic(t._id)">Delete</button>
+                <button class="btn btn-sm btn-danger" (click)="deleteTopic(t._id!)">Delete</button>
               </td>
             </tr>
-            <tr *ngIf="topics.length === 0">
+            <tr *ngIf="topics?.length === 0">
               <td colspan="6" class="text-center text-muted">No topics found.</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+
+    <!-- =============== CONTENT TAB =============== -->
+    <div id="tabContent" class="tab-pane fade">
+      <h5>Select Section, Module & Topic</h5>
+
+      <div class="row g-2 align-items-center mb-3">
+        <div class="col-12 col-md-3">
+          <select class="form-select" (change)="onSectionChange($event)">
+            <option value="">-- Select Section --</option>
+            <option *ngFor="let s of sections" [value]="s._id">{{ s.sectionName }}</option>
+          </select>
+        </div>
+
+        <div class="col-12 col-md-3">
+          <select class="form-select" (change)="onModuleChange($event)">
+            <option value="">-- Select Module --</option>
+            <option *ngFor="let m of modules" [value]="m._id">{{ m.title }}</option>
+          </select>
+        </div>
+
+        <div class="col-12 col-md-3">
+          <select class="form-select" (change)="onTopicChange($event)">
+            <option value="">-- Select Topic --</option>
+            <option *ngFor="let t of topics" [value]="t._id">{{ t.title }}</option>
+          </select>
+        </div>
+      </div>
+
+
+      <div *ngIf="selectedTopicId">
+        <div class="row g-2 align-items-center mb-3">
+          <!-- Content Title -->
+          <div class="col-12 col-md-3">
+            <input #contentTitle type="text" placeholder="Enter Content Title" class="form-control" />
+          </div>
+
+          <!-- Content Type -->
+          <div class="col-12 col-md-3">
+            <select #contentType class="form-select">
+              <option value="">-- Select Type --</option>
+              <option value="video">Video</option>
+              <option value="pdf">PDF</option>
+              <option value="quiz">Quiz</option>
+              <option value="article">Article</option>
+            </select>
+          </div>
+
+          <!-- Content URL -->
+          <div class="col-12 col-md-3">
+            <input #contentUrl type="text" placeholder="Enter Content URL" class="form-control" />
+          </div>
+
+          <!-- Add Button -->
+          <div class="col-12 col-md-2 d-grid">
+            <button class="btn btn-primary"
+              (click)="addContent(contentTitle.value, contentType.value, contentUrl.value)">
+              Add Content
+            </button>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="table-responsive mt-4">
+        <table class="topic-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Type</th>
+              <th>URL</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of contents; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ c.contentName }}</td>
+              <td>{{ c.contentType }}</td>
+              <td>
+                <a [href]="c.contentUrl" target="_blank">{{ c.contentUrl }}</a>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-primary me-2" (click)="updateContent(c)">Edit</button>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-danger" (click)="deleteContent(c._id!)">Delete</button>
+              </td>
+            </tr>
+            <tr *ngIf="contents?.length === 0">
+              <td colspan="6" class="text-center text-muted">No contents found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
   </div>
 </div>

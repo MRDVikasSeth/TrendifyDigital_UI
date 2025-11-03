@@ -1,60 +1,8 @@
-/* :root {
-  --primary-color: #2C3E50;      
-  --secondary-color: #E67E22;    
-  --accent-color: #1ABC9C;       
-  --background-color: #F4F6F8;    
-  --text-primary: #2C3E50;        
-  --text-secondary: #7F8C8D;    
-
-  --background-image-url: url('https://images.unsplash.com/photo-1503264116251-35a269479413');
-
-  --login-bg-color: rgba(255, 255, 255, 0.7);
-  --logo-bar-bg: #2C3E50;
-  --logo-bar-bg-hover: #34495E;
-
-  --input-group-bg: #ecf0f1;
-
-  --btn-warning-bg: #1ABC9C;
-  --btn-warning-bg-hover: #16A085;
-  --btn-warning-color: #fff;
-
-  --btn-border-radius: 4px;
-
-  --input-height: 42px;
-  --btn-height: 48px;
-  --btn-padding-x: 1.75rem;
-
-  --box-shadow-login: 0 0 25px rgba(0, 0, 0, 0.1);
-} */
-
-
-
- /* :root {
-  --primary-color: #1E2A78;
-  --secondary-color: #FF6F61;
-  --accent-color: #FFC845;
-  --background-color: #FAF7F0;
-  --text-primary: #333333;
-  --text-secondary: #777777;
-
-  --background-image-url: url('https://images.unsplash.com/photo-1521791136064-7986c2920216');
-
-  --login-bg-color: rgba(255, 255, 255, 0.6);
-  --logo-bar-bg: #1E2A78;
-  --logo-bar-bg-hover: #7884d1;
-  --input-group-bg: #eee;
-  --btn-warning-bg: #1E2A78;
-  --btn-warning-bg-hover: #7884d1;
-  --btn-warning-color: #000;
-  --btn-border-radius: 2px;
-  --input-height: 40px;
-  --btn-height: 45px;
-  --btn-padding-x: 1.5rem;
-  --box-shadow-login: 0 0 20px rgba(0, 0, 0, 0.15);
-}  */
-
-
-:root {
+/* =============================
+   Default Theme (Theme 1)
+============================= */
+:root,
+.theme-modern {
   --primary-color: #4B6CB7;
   --secondary-color: #FF6B6B;
   --accent-color: #FFD93D;
@@ -65,8 +13,8 @@
   --background-image-url: url('https://images.unsplash.com/photo-1521791136064-7986c2920216');
 
   --login-bg-color: rgba(255, 255, 255, 0.8);
-  --logo-bar-bg: #4B6CB7;       
-  --logo-bar-bg-hover: #3A549B; 
+  --logo-bar-bg: #4B6CB7;
+  --logo-bar-bg-hover: #3A549B;
   --input-group-bg: #EFEFEF;
   --btn-warning-bg: #FF6B6B;
   --btn-warning-bg-hover: #FF4C4C;
@@ -75,5 +23,60 @@
   --input-height: 45px;
   --btn-height: 48px;
   --btn-padding-x: 1.5rem;
-  --box-shadow-login: 0 8px 25px rgba(0, 0, 0, 0.2); 
+  --box-shadow-login: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
+
+.theme-default {
+  --primary-color: #2C3E50;
+  --secondary-color: #E67E22;
+  --accent-color: #1ABC9C;
+  --background-color: #F4F6F8;
+  --text-primary: #2C3E50;
+  --text-secondary: #7F8C8D;
+
+  --background-image-url: url('https://images.unsplash.com/photo-1503264116251-35a269479413');
+
+  --login-bg-color: rgba(255, 255, 255, 0.7);
+  --logo-bar-bg: #2C3E50;
+  --logo-bar-bg-hover: #34495E;
+  --input-group-bg: #ecf0f1;
+  --btn-warning-bg: #1ABC9C;
+  --btn-warning-bg-hover: #16A085;
+  --btn-warning-color: #fff;
+  --btn-border-radius: 4px;
+  --input-height: 42px;
+  --btn-height: 48px;
+  --btn-padding-x: 1.75rem;
+  --box-shadow-login: 0 0 25px rgba(0, 0, 0, 0.1);
+}
+
+/* =============================
+   Blue-Purple Theme (Theme 2)
+============================= */
+.theme-blue {
+  --primary-color: #2F3C7E;        /* Deep indigo blue - professional, reliable */
+  --secondary-color: #f8878f;      /* Soft rose white - balanced warmth */
+  --accent-color: #F9A826;         /* Muted amber for highlights */
+  --background-color: #F4F6FA;     /* Neutral light gray-blue background */
+  --text-primary: #1A1A1A;         /* Strong readable text */
+  --text-secondary: #6B7280;       /* Medium gray for secondary text */
+
+  --background-image-url: url('https://images.unsplash.com/photo-1522204501961-7c8f7db35a4b?auto=format&fit=crop&w=1600&q=80');
+
+  --login-bg-color: rgba(255, 255, 255, 0.85);
+  --logo-bar-bg: #2F3C7E;          /* Same as primary */
+  --logo-bar-bg-hover: #25316D;    /* Slightly darker for hover */
+  --input-group-bg: #F9FAFB;       /* Subtle input field contrast */
+
+  --btn-warning-bg: #2F3C7E;       /* Matches primary for consistency */
+  --btn-warning-bg-hover: #25316D;
+  --btn-warning-color: #FFFFFF;    /* White text on blue buttons */
+
+  --btn-border-radius: 6px;
+  --input-height: 44px;
+  --btn-height: 48px;
+  --btn-padding-x: 1.5rem;
+
+  --box-shadow-login: 0 8px 25px rgba(47, 60, 126, 0.15); /* Soft shadow using primary tint */
+}
+

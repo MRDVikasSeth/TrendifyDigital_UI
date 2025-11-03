@@ -27,13 +27,13 @@
       <li class="nav-item" *ngIf="isAdminFlag">
         <a class="nav-link text-white fw-bold" routerLink="/home/manageStudent">Manage Student</a>
       </li>
-       <li class="nav-item" *ngIf="isAdminFlag">
+      <li class="nav-item" *ngIf="isAdminFlag">
         <a class="nav-link text-white fw-bold" routerLink="/home/Manage-Cource">Manage Cource</a>
       </li>
 
 
       <!-- Generic dropdown for all -->
-      <li class="nav-item dropdown" >
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle text-white px-3" href="#" role="button" data-bs-toggle="dropdown"
           aria-expanded="false">
           More
@@ -51,6 +51,38 @@
           <li><a class="dropdown-item text-danger" (click)="signOut()">Sign out</a></li>
         </ul>
       </li>
+
+     <li class="nav-item dropdown" *ngIf="isAdminFlag">
+  <a
+    class="nav-link dropdown-toggle text-white px-3"
+    href="#"
+    role="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    Theme Update
+  </a>
+
+  <ul class="dropdown-menu shadow-sm border-0 p-2">
+    <li>
+      <a class="dropdown-item d-flex align-items-center gap-2" (click)="switchTheme('theme-default')">
+        <span class="theme-preview bg-dark"></span> Default
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center gap-2"  (click)="switchTheme('theme-blue')">
+        <span class="theme-preview bg-primary"></span> Blue / Purple
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center gap-2"(click)="switchTheme('theme-modern')">
+        <span class="theme-preview bg-primary"></span> Modern Light
+      </a>
+    </li>
+  </ul>
+</li>
+
+
 
     </ul>
 
