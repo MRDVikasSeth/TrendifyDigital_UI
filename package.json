@@ -27,6 +27,7 @@
     "@capacitor/android": "^7.4.4",
     "@capacitor/cli": "^7.4.4",
     "@capacitor/core": "^7.4.4",
+    "@capacitor/ios": "^7.4.4",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.7",
     "chart.js": "^4.5.1",
