@@ -63,9 +63,14 @@ export class LoginPage implements OnInit {
           setTimeout(async () => {
             try {
               const studentID = student.StudentID;
-
               const profile = await this.fetchProfile(studentID);
-              this.router.navigate(['/home'], { state: { profile } });
+              const studentRole = profile.role;
+
+              if (studentRole === 'admin') {
+                this.router.navigate(['/home/admin-Dashboard'], { state: { profile } });
+              } else {
+                this.router.navigate(['/home/dashboard'], { state: { profile } });
+              }
 
             } catch (profileError) {
               Swal.fire({ icon: 'error', title: 'Profile Error', text: 'Could not load profile data.', timer: 3000 });

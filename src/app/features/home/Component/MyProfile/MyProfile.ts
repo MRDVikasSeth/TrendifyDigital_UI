@@ -71,6 +71,9 @@ export class MyProfile implements OnInit {
   isPasswordLoading: boolean = false;
   passwordMessage: string = '';
   isPasswordSuccess: boolean = false;
+  totalCourseCost = 0;
+  totalPaid = 0;
+  pendingAmount = 0;
   user = {
     name: '',
     enrollId: '',
@@ -147,7 +150,16 @@ export class MyProfile implements OnInit {
 
   loadPayments(studentId: string) {
     this.paymentSer.getPaymentsByStudent(studentId).subscribe({
-      next: (res) => (this.payments = res || []),
+      next: (res) => {
+        if (res.success) {
+          this.payments = res.payments || [];
+          this.totalCourseCost = res.summary?.totalCourseCost || 0;
+          this.totalPaid = res.summary?.totalPaid || 0;
+          this.pendingAmount = res.summary?.pendingAmount || 0;
+        } else {
+          this.payments = [];
+        }
+      },
       error: (err) => console.error('Error loading payments:', err)
     });
   }

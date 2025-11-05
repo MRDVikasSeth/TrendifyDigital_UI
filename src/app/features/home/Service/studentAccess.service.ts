@@ -16,9 +16,14 @@ export class StudentAccessService {
     return this.http.get<StudentAccessDTO[]>(`${this.apiUrl}/${studentId}`);
   }
 
-  assignAccess(studentId: string, sectionId: number, grantedBy: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/assign`, { studentId, sectionId, grantedBy });
+  assignAccess(studentId: string, sectionId: string, grantedBy: string, sectionCost?: number): Observable<any> {
+  const payload: any = { studentId, sectionId, grantedBy };
+  if (sectionCost !== undefined) {
+    payload.sectionCost = sectionCost;
   }
+  return this.http.post(`${this.apiUrl}/assign`, payload);
+}
+
 
   revokeAccess(studentId: string, sectionId: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/revoke`, { studentId, sectionId });

@@ -36,7 +36,7 @@
       <div class="card text-center">
         <div class="icon pink"><i class="fa fa-rupee-sign"></i></div>
         <div>
-        <h3><i class="fa fa-rupee-sign"></i> {{ totalPayments | number }}</h3>
+          <h3><i class="fa fa-rupee-sign"></i> {{ totalPayments | number }}</h3>
           <p>Total Payments</p>
         </div>
       </div>
@@ -53,14 +53,15 @@
       </div>
     </div>
 
+
     <!-- Quick Actions -->
     <div class="col-12 col-lg-4">
       <div class="quick-actions h-100">
         <h3>Quick Actions</h3>
         <div class="actions-grid">
-          <button class="action-btn primary">+ Add New Course</button>
-          <button class="action-btn secondary">+ Add New Student</button>
-          <button class="action-btn accent">View Payments</button>
+          <button class="action-btn primary" routerLink="/home/Manage-Cource">+ Add New Course</button>
+          <button class="action-btn secondary" routerLink="/home/manageStudent">+ Add New Student</button>
+          <button class="action-btn accent" routerLink="/home/manageStudent">View Payments</button>
           <button class="action-btn warning">Manage Settings</button>
         </div>
       </div>

@@ -237,6 +237,21 @@
 
                     <!-- payments tab -->
                     <div class="tab-pane fade" id="payments">
+
+                        <div class="payment-summary mt-3">
+                            <div class="summary-card total">
+                                <h4>Total Course Cost</h4>
+                                <p>₹{{ totalCourseCost | number:'1.0-0' }}</p>
+                            </div>
+                            <div class="summary-card paid">
+                                <h4>Total Paid</h4>
+                                <p>₹{{ totalPaid | number:'1.0-0' }}</p>
+                            </div>
+                            <div class="summary-card pending">
+                                <h4>Pending Payment</h4>
+                                <p>₹{{ pendingAmount | number:'1.0-0' }}</p>
+                            </div>
+                        </div>
                         <table class="table table-striped mt-3">
                             <thead>
                                 <tr>
@@ -270,7 +285,11 @@
                                     <th colspan="3"></th>
                                 </tr>
                             </tfoot>
+
+
+
                         </table>
+
                     </div>
 
 

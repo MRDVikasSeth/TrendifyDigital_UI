@@ -16,17 +16,21 @@ export class StudentPaymentComponent implements OnInit {
   isPaymentModalOpen = false;
   isEditMode = false;
   paymentData: any = {};
+  totalCourseCost = 0;
+  totalPaid = 0;
+  pendingAmount = 0;
+
 
   constructor(
     private route: ActivatedRoute,
     private paymentService: StudentPaymentService,
-     private studentSer: StudentService
+    private studentSer: StudentService
   ) { }
 
   ngOnInit(): void {
     this.studentId = this.route.snapshot.paramMap.get('studentId')!;
     this.loadPayments();
-     this.loadStudentDetails(this.studentId);
+    this.loadStudentDetails(this.studentId);
   }
   loadStudentDetails(studentId: string) {
     this.studentSer.getProfile(studentId).subscribe({
@@ -41,11 +45,17 @@ export class StudentPaymentComponent implements OnInit {
   loadPayments() {
     this.paymentService.getPaymentsByStudent(this.studentId).subscribe({
       next: (res) => {
-        this.payments = res;
+        if (res.success) {
+          this.payments = res.payments;
+          this.totalCourseCost = res.summary.totalCourseCost;
+          this.totalPaid = res.summary.totalPaid;
+          this.pendingAmount = res.summary.pendingAmount;
+        }
       },
       error: (err) => console.error('Error loading payments:', err)
     });
   }
+
 
   openAddPaymentModal() {
     this.isEditMode = false;

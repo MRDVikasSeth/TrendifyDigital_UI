@@ -66,37 +66,7 @@
   </div>
 
 
-  <!-- Payment Details -->
-  <div class="payment-section p-3 mb-4 rounded">
-    <h5 class="text-white"><strong>₹ Course Fee / Due Instalments</strong></h5>
-    <div class="table-responsive">
-      <table class="table table-hover table-bordered mb-0">
-        <thead>
-          <tr>
-            <th>INSTALLMENT DATE</th>
-            <th>AMOUNT</th>
-            <th>STATUS</th>
-            <th>PAYMENT MODE / REFERENCE NO.</th>
-            <th>ENROLL ID</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let inst of installments">
-            <td>{{ inst.date }}</td>
-            <td><strong>₹ {{ inst.amount | number }}</strong></td>
-            <td><strong>{{ inst.status }}</strong></td>
-            <td>{{ inst.paymentMode }}</td>
-            <td>{{ inst.enrollId }}</td>
-          </tr>
-          <tr>
-            <td><strong>Total</strong></td>
-            <td colspan="4"><strong>₹ {{ totalAmount | number }}</strong></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-  </div>
+ 
 
   <!-- Center / Batch Info -->
   <div class="payment-section p-3 rounded">
@@ -109,10 +79,6 @@
             <th class="label">Batch No.</th>
             <td class="value">{{ this.batchCode}}</td>
           </tr>
-          <!-- <tr>
-            <th class="label">Timing</th>
-            <td class="value"><i class="far fa-clock"></i> {{ batch.timing }}</td>
-          </tr> -->
           <tr>
             <th class="label">Week Days</th>
             <td class="value">{{ batch.weekdays.join(', ') }}</td>

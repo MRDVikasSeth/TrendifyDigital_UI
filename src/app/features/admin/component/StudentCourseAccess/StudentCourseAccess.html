@@ -5,8 +5,8 @@
             🎓 <span>Student Access Management</span>
             <small>({{ studentName | uppercase }})</small>
         </h2>
-        <h5 >
-           
+        <h5>
+
             <!-- <small>({{studentId}})</small> -->
         </h5>
 
@@ -17,15 +17,14 @@
         <table class="student-table">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Section ID</th>
                     <th>Section Title</th>
                     <th>Access Status</th>
+                    <th>Section Cost (₹)</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let section of courseSections">                     
-                    <td>{{ section.sectionId }}</td>
+                <tr *ngFor="let section of courseSections">
                     <td>{{ section._id }}</td>
                     <td>{{ section.sectionName }}</td>
                     <td>
@@ -34,11 +33,10 @@
                             {{ section.accessGranted ? 'Revoke Access' : 'Grant Access' }}
                         </button>
                     </td>
-                </tr>
-                <tr *ngIf="courseSections.length === 0">
-                    <td colspan="4" class="no-data">No course sections available.</td>
+                    <td>{{ section.sectionCost }}</td>
                 </tr>
             </tbody>
         </table>
+
     </div>
 </div>

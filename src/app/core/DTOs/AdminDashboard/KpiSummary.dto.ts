@@ -3,4 +3,5 @@ export interface KpiSummaryDTO {
   totalStudents: number;
   totalPayments: number;
   pendingPayments: number;
+  totalEarning: number;
 }

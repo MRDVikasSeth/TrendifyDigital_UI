@@ -7,24 +7,24 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class StudentPaymentService {
-//   private baseUrl = 'http://localhost:3000/api/payments'; 
-    private apiUrl = `${environment.apiBaseUrl}payments`;
+  //   private baseUrl = 'http://localhost:3000/api/payments'; 
+  private apiUrl = `${environment.apiBaseUrl}payments`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getPaymentsByStudent(studentId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${studentId}`);
+  getPaymentsByStudent(studentId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${studentId}`);
   }
 
   addPayment(paymentData: any, adminId: string): Observable<any> {
-  const payload = { ...paymentData, createdBy: adminId };
-  return this.http.post<any>(this.apiUrl, payload);
-}
+    const payload = { ...paymentData, createdBy: adminId };
+    return this.http.post<any>(this.apiUrl, payload);
+  }
 
-updatePayment(paymentId: string, paymentData: any, adminId: string): Observable<any> {
-  const payload = { ...paymentData, updatedBy: adminId };
-  return this.http.put<any>(`${this.apiUrl}/${paymentId}`, payload);
-}
+  updatePayment(paymentId: string, paymentData: any, adminId: string): Observable<any> {
+    const payload = { ...paymentData, updatedBy: adminId };
+    return this.http.put<any>(`${this.apiUrl}/${paymentId}`, payload);
+  }
 
 
   deletePayment(paymentId: string): Observable<any> {
